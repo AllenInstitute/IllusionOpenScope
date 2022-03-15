@@ -1,0 +1,65 @@
+# note, in visual.GratingStim, when using a image file as a mask, the pixel depth must be 3 (e.g., RGB image)
+# uint8 numbers, "white" part of the image (255,255,255) are fully transparent
+# note, tif image mask gets rescaled to "size" parameter in Stimulus(visual.GratingStim())
+# i.e., must have the same aspect ratio
+# be careful with tif file size (e.g., 4096X4096 pixel tifs can lead to a lag ~+50%)
+
+import glob
+tifdir = "C://Users//Hyeyoung//Documents//OpenScope//vissizemask//"
+masklist = glob.glob(tifdir + '*.tif')
+
+import csv
+csvfn = 'C://Users//Hyeyoung//Documents//OpenScope//illusion_camstim//DURFAC.csv'
+with open(csvfn, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    DURFAC = next(csv_reader)
+DURFAC = int(DURFAC[0])
+print('DURFAC: ' + str(DURFAC))
+
+
+rfpos = [(0,0)]
+orivec = range(0, 360, 45) # [0]
+
+stimulus = Stimulus(visual.GratingStim(window,
+                         pos=(0, 0), 
+                         units='pix',
+                         size= (2560,2560), #(4096,4096), #(1920,1200),
+                         #mask= tiffn, #alphamask, #"circle", #"None"
+                         tex='sqr',
+                         texRes=256,
+                         #ori = 135,
+                         sf=0.04/12.7112, # cycles/units. if units='pix', cycles/pix
+                         contrast=1,
+                         ),
+                # pos 0, TF 1, SF 2, Ori 3, contrast 4
+                # regardless of column index, when shuffle=False, 
+                # iterates first through ori, then through masks, then through positions
+                sweep_params={
+                    'TF': ([2.0], 1),
+                    'Mask': (masklist, 4),
+                    'Ori': (orivec, 3),
+                    },
+                sweep_length=0.25,
+                start_time=0.0,
+                blank_length=0.5,
+                blank_sweeps=0, # when 2, 1 out of 3 stimuli are blank (if shuffle=False, stim stim blank)
+                runs=2*DURFAC, # when sweep_order is custom designated, runs is ignored
+                shuffle=False,
+                save_sweep_table=True,
+                )
+
+# # replace the auto-generated sweep order with a custom one
+## randomize the order of non-blank trials
+sweep_order = np.asarray(stimulus.sweep_order)
+nonblanktrialinds = np.where(np.not_equal(sweep_order, -1))
+nonblanktrials = sweep_order[nonblanktrialinds[0]]
+np.random.shuffle(nonblanktrials)
+sweep_order[nonblanktrialinds[0]] = nonblanktrials
+stimulus.sweep_order = sweep_order.reshape(-1).tolist()
+
+
+# rebuild the frame list (I may make this automatic in the future)
+stimulus._build_frame_list()
+
+print('sizeCI stim')
+print(stimulus.sweep_order)

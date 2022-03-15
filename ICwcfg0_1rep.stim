@@ -1,0 +1,45 @@
+from camstim import NaturalScenes
+import os
+import numpy as np
+import csv
+csvfn = 'C://Users//Hyeyoung//Documents//OpenScope//illusion_camstim//Nrep.csv'
+with open(csvfn, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    Nrep = next(csv_reader)
+Nrep = int(Nrep[0])
+print('Nrep: ' + str(Nrep))
+
+path = r"C://Users//Hyeyoung//Documents//OpenScope//visICtxiwcfg0"
+
+Nblank_sweeps_start=6*Nrep,
+Nblank_sweeps_end=6*Nrep,
+
+stimulus = NaturalScenes(image_path_list=path,
+                         window=window,
+                         sweep_length=0.4,
+                         blank_length=0,
+                         blank_sweeps=0, #1,
+                         runs=1,
+                         shuffle=True,)
+
+image_path_list = stimulus.image_path_list
+trialorder = np.tile(range(len(image_path_list)), Nrep)
+np.random.shuffle(trialorder)
+
+# replace the auto-generated sweep order with a custom one
+sweep_order_main = np.zeros(2*len(trialorder))
+sweep_order_main[range(0,len(sweep_order_main),2)]=trialorder
+sweep_order_main[range(1,len(sweep_order_main),2)]=-1
+
+# pad blank stimuli at the beginning and end
+sweepstart = -1*np.ones(Nblank_sweeps_start, dtype=sweep_order_main.dtype)
+sweepend = -1*np.ones(Nblank_sweeps_end, dtype=sweep_order_main.dtype)
+sweep_order = np.concatenate((sweepstart, sweep_order_main, sweepend))
+
+# replace blank stimulus with the first stimulus in path. (make sure this is four white circles!)
+sweep_order[sweep_order==-1]=0
+stimulus.sweep_order = sweep_order.reshape(-1).tolist()
+stimulus._build_frame_list()
+
+print('ICcfg0 stim')
+print(stimulus.sweep_order)

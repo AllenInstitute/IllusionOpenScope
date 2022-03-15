@@ -1,0 +1,56 @@
+from camstim import NaturalScenes
+import os
+
+path = r"C://Users//Hyeyoung//Documents//OpenScope//visICtxiwcfg1"
+
+Nblank_sweeps_start=60,
+Nblank_sweeps_end=60,
+
+stimulus = NaturalScenes(image_path_list=path,
+                         window=window,
+                         sweep_length=0.4,
+                         blank_length=0,
+                         blank_sweeps=0, #1,
+                         runs=1,
+                         shuffle=True,)
+
+image_path_list = stimulus.image_path_list
+highrepstim = ["110000", "110101", "110105", "110106", "110107", "110109", "110110", 
+               "110111", "111105", "111109", "111201", "111299"]
+highrepstiminds = np.zeros(len(highrepstim))
+highcnt = 0
+lowrepstiminds = np.zeros(len(image_path_list)-len(highrepstim))
+lowcnt = 0
+for ii, imfn in enumerate(image_path_list):
+    imid = imfn.split('\\')[-1].split('.')[0]
+    if imid in highrepstim:
+        highrepstiminds[highcnt] = ii
+        highcnt += 1
+    else:
+        lowrepstiminds[lowcnt] = ii
+        lowcnt += 1
+
+if not highcnt==len(highrepstim) and lowcnt==len(image_path_list)-len(highrepstim):
+    raise Exception('check highrepstiminds and lowrepstiminds')
+
+# define and randomize the order of non-blank trials
+trialorder = np.concatenate((np.tile(highrepstiminds, 400), np.tile(lowrepstiminds, 50)))
+np.random.shuffle(trialorder)
+
+# replace the auto-generated sweep order with a custom one
+sweep_order_main = np.zeros(2*len(trialorder))
+sweep_order_main[range(0,len(sweep_order_main),2)]=trialorder
+sweep_order_main[range(1,len(sweep_order_main),2)]=-1
+
+# pad blank stimuli at the beginning and end
+sweepstart = -1*np.ones(Nblank_sweeps_start, dtype=sweep_order_main.dtype)
+sweepend = -1*np.ones(Nblank_sweeps_end, dtype=sweep_order_main.dtype)
+sweep_order = np.concatenate((sweepstart, sweep_order_main, sweepend))
+
+# replace blank stimulus with the first stimulus in path. (make sure this is four white circles!)
+sweep_order[sweep_order==-1]=0
+stimulus.sweep_order = sweep_order.reshape(-1).tolist()
+stimulus._build_frame_list()
+
+print('ICcfg1 stim')
+print(stimulus.sweep_order)
