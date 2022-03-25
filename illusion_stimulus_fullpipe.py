@@ -50,9 +50,9 @@ part1s = ICwcfg1_ds[-1][-1] # end of part 1
 ICwcfg0_ds = [(part1s, part1s+480)]
 ICkcfg1_ds = [(part1s+480, part1s+960)]
 ICkcfg0_ds = [(part1s+960, part1s+1440)]
-part2s = ICkcfg0_ds[-1][-1] # end of part 2
+part2s = ICkcfg0_ds[-1][-1] # end of part 2. 4800+1440=6240
 RFCI_ds = [(part2s, part2s+210)]
-sizeCI_ds = [(part2s+210, part2s+980)]
+sizeCI_ds = [(part2s+210, part2s+980)] # 6240+980=7220
 
 ICwcfg1.set_display_sequence(ICwcfg1_ds)
 ICwcfg0.set_display_sequence(ICwcfg0_ds)
