@@ -16,7 +16,7 @@ stimulus = NaturalScenes(image_path_list=path,
                          shuffle=False,)
 
 image_path_list = stimulus.image_path_list
-trialorder = np.tile(range(len(image_path_list)), 20)
+trialorder = np.tile(range(len(image_path_list)), 25)
 np.random.shuffle(trialorder)
 
 # replace the auto-generated sweep order with a custom one
