@@ -26,7 +26,7 @@ if __name__ == "__main__":
     shared_repository_location = json_params.get('shared_repository_location', r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim")
     
     # mtrain should be providing : Gamma1.Luminance50
-    monitor_name = json_params.get('shared_repository_location', "illusionMonitor")
+    monitor_name = json_params.get('monitor_name', "illusionMonitor")
     
     # mtrain should be providing varying value depending on stage
     DURFAC = int(json_params.get('DURFAC', 1))
