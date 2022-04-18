@@ -29,7 +29,7 @@ if __name__ == "__main__":
     monitor_name = json_params.get('shared_repository_location', "illusionMonitor")
     
     # mtrain should be providing varying value depending on stage
-    Nrep = int(json_params.get('Nrep', 1))
+    Nrep = int(json_params.get('Nrep', 2))
 
     print('Nrep: ' + str(Nrep))
 
