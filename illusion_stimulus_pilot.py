@@ -1,111 +1,90 @@
 """
-modified from brain_observatory_stimulus.py
+Author:         Hyeyoung Shin (Berkeley University), Jerome Lecoq (Allen Institute)
 """
-from psychopy import visual, monitors
+import camstim
 from camstim import Stimulus, SweepStim
 from camstim import Foraging
-from camstim import Window, Warp
-# from zro.proxy import DeviceProxy
-import time
-import datetime
-import numpy as np
+from camstim import Window
+import argparse
+import yaml
+import os
 
-# from .optotagging import optotagging
-# from ecephys_stimulus_scripts.optotagging import optotagging
-# from ecephys import optotagging
+if __name__ == "__main__":
+    # This part load parameters from mtrain
+    parser = argparse.ArgumentParser()
+    parser.add_argument("json_path", nargs="?", type=str, default="")
 
-import csv
-csvfn = 'C://Users//Hyeyoung//Documents//OpenScope//illusion_camstim//Nrep.csv'
-with open(csvfn, 'r') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    Nrep = next(csv_reader)
-Nrep = int(Nrep[0])
-print('Nrep: ' + str(Nrep))
+    args, _ = parser.parse_known_args() # <- this ensures that we ignore other arguments that might be needed by camstim
+    
+    # print args
+    with open(args.json_path, 'r') as f:
+        # we use the yaml package here because the json package loads as unicode, which prevents using the keys as parameters later
+        json_params = yaml.load(f)
+    # end of mtrain part
+    
+    # mtrain should be providing : a path to a network folder or a local folder with the entire repo pulled
+    shared_repository_location = json_params.get('shared_repository_location', r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim")
+    
+    # mtrain should be providing : Gamma1.Luminance50
+    monitor_name = json_params.get('shared_repository_location', "illusionMonitor")
+    
+    # mtrain should be providing varying value depending on stage
+    Nrep = int(json_params.get('Nrep', 1))
 
-# Create display window
-window = Window(fullscr=True,
-                monitor="illusionMonitor",
-                screen=1, warp=None)
+    print('Nrep: ' + str(Nrep))
 
+    # Create display window
+    window = Window(fullscr=True,
+                    monitor=monitor_name,
+                    screen=1, warp=None)
 
-# paths to our stimuli
-ICwcfg1_path =       r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim\ICwcfg1_1rep.stim" #  minutes ( s)
-ICwcfg0_path =       r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim\ICwcfg0_1rep.stim" #  minutes ( s)
-ICkcfg1_path =       r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim\ICkcfg1_1rep.stim" #  minutes ( s)
-ICkcfg0_path =       r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim\ICkcfg0_1rep.stim" #  minutes ( s)
+    # paths to our stimuli
+    ICwcfg1_path = os.path.join(shared_repository_location, "ICwcfg1_1rep.stim")
+    ICwcfg0_path = os.path.join(shared_repository_location, "ICwcfg0_1rep.stim")
+    ICkcfg1_path = os.path.join(shared_repository_location, "ICkcfg1_1rep.stim") 
+    ICkcfg0_path = os.path.join(shared_repository_location, "ICkcfg0_1rep.stim")
 
-RFCI_path =         r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim\RFCI_1rep.stim"
-sizeCI_path =         r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim\sizeCI_1rep.stim"
+    RFCI_path = os.path.join(shared_repository_location, "RFCI_1rep.stim")
+    sizeCI_path = os.path.join(shared_repository_location, "sizeCI_1rep.stim")
 
-# grating_path =         r"C:\Users\Hyeyoung\Documents\OpenScope\illusion_camstim\grating.stim"
+    # load our stimuli
+    ICwcfg1 = Stimulus.from_file(ICwcfg1_path, window) 
+    ICwcfg0 = Stimulus.from_file(ICwcfg0_path, window) 
+    ICkcfg1 = Stimulus.from_file(ICkcfg1_path, window) 
+    ICkcfg0 = Stimulus.from_file(ICkcfg0_path, window) 
+    RFCI = Stimulus.from_file(RFCI_path, window) 
+    sizeCI = Stimulus.from_file(sizeCI_path, window)
 
+    # each tuple determines in seconds start and end of each block.
+    ICwcfg1_ds = [(0, 30*Nrep)]
+    ICwcfg0_ds = [(30*Nrep, 60*Nrep)]
+    ICkcfg1_ds = [(60*Nrep, 90*Nrep)]
+    ICkcfg0_ds = [(90*Nrep, 120*Nrep)]
+    RFCI_ds = [(120*Nrep, 145*Nrep)]
+    sizeCI_ds = [(145*Nrep, 220*Nrep)]
 
-# load our stimuli
-ICwcfg1 = Stimulus.from_file(ICwcfg1_path, window) 
-ICwcfg0 = Stimulus.from_file(ICwcfg0_path, window) 
-ICkcfg1 = Stimulus.from_file(ICkcfg1_path, window) 
-ICkcfg0 = Stimulus.from_file(ICkcfg0_path, window) 
-RFCI = Stimulus.from_file(RFCI_path, window) 
-sizeCI = Stimulus.from_file(sizeCI_path, window)
+    ICwcfg1.set_display_sequence(ICwcfg1_ds)
+    ICwcfg0.set_display_sequence(ICwcfg0_ds)
+    ICkcfg1.set_display_sequence(ICkcfg1_ds)
+    ICkcfg0.set_display_sequence(ICkcfg0_ds)
+    RFCI.set_display_sequence(RFCI_ds)
+    sizeCI.set_display_sequence(sizeCI_ds)
 
-# grating = Stimulus.from_file(grating_path, window) 
+    # create SweepStim instance
+    ss = SweepStim(window,
+                stimuli= [ICwcfg1, ICwcfg0, ICkcfg1, ICkcfg0, RFCI, sizeCI],
+                pre_blank_sec=0, #60,
+                post_blank_sec=30, #60,
+                params={},
+                )
+    
+    # add in foraging so we can track wheel, potentially give rewards, etc
+    f = Foraging(window       = window,
+                                auto_update = False,
+                                params      = {}
+                                )
+    
+    ss.add_item(f, "foraging")
 
-
-# each tuple determines in seconds start and end of each block.
-ICwcfg1_ds = [(0, 30*Nrep)]
-ICwcfg0_ds = [(30*Nrep, 60*Nrep)]
-ICkcfg1_ds = [(60*Nrep, 90*Nrep)]
-ICkcfg0_ds = [(90*Nrep, 120*Nrep)]
-RFCI_ds = [(120*Nrep, 145*Nrep)]
-sizeCI_ds = [(145*Nrep, 220*Nrep)]
-
-
-ICwcfg1.set_display_sequence(ICwcfg1_ds)
-ICwcfg0.set_display_sequence(ICwcfg0_ds)
-ICkcfg1.set_display_sequence(ICkcfg1_ds)
-ICkcfg0.set_display_sequence(ICkcfg0_ds)
-RFCI.set_display_sequence(RFCI_ds)
-sizeCI.set_display_sequence(sizeCI_ds)
-
-# grating.set_display_sequence(grating_ds)
-
-# kwargs
-params = {
-    'syncpulse': True,
-    'syncpulseport': 1,
-    'syncpulselines': [4, 7],  # frame, start/stop
-    'trigger_delay_sec': 0.0,
-    'bgcolor': (-1,-1,-1),
-    'eyetracker': False,
-    'eyetrackerip': "W7DT12722",
-    'eyetrackerport': 1000,
-    'syncsqr': True,
-    'syncsqrloc': (0,0), 
-    'syncsqrfreq': 60,
-    'syncsqrsize': (100,100),
-    'showmouse': True
-}
-
-
-# W7DT12722
-
-# create SweepStim instance
-ss = SweepStim(window,
-               stimuli= [ICwcfg1, ICwcfg0, ICkcfg1, ICkcfg0, RFCI, sizeCI],
-               pre_blank_sec=0, #60,
-               post_blank_sec=30, #60,
-               params=params,
-               )
-
-# # add in foraging so we can track wheel, potentially give rewards, etc
-# f = Foraging(window=window,
-#             auto_update=False,
-#             params=params,
-#             nidaq_tasks={'digital_input': ss.di,
-#                          'digital_output': ss.do,})  #share di and do with SS
-# ss.add_item(f, "foraging")
-
-# run it
-ss.run()
-
-# optotagging.optotagging('404555',genotype='c57')
+    # run it
+    ss.run()
