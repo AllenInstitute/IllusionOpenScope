@@ -546,7 +546,7 @@ if __name__ == "__main__":
     # run it
     ss.run()
 
-    opto_disabled = not json_params.get('disable_opto', True)
+    opto_disabled = json_params.get('disable_opto', True)
     
     if not(opto_disabled):
         
