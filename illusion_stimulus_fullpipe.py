@@ -532,13 +532,13 @@ if __name__ == "__main__":
                 stimuli= [ICwcfg1, ICwcfg0, ICkcfg1, ICkcfg0, RFCI, sizeCI],
                 pre_blank_sec=0,
                 post_blank_sec=30,
-                params= {'sync_sqr_loc' : (910, 550)}
+                params= {'sync_sqr_loc' : (868, 528)}
                 )
 
     # add in foraging so we can track wheel, potentially give rewards, etc
     f = Foraging(window       = window,
                                 auto_update = False,
-                                params      = {}
+                                params= {'sync_sqr_loc' : (868, 528)}
                                 )
     
     ss.add_item(f, "foraging")
