@@ -431,12 +431,11 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28,
         opto_conditions = condition_list*numRepeats*len(level_list)
         opto_conditions = np.sort(opto_conditions)
         opto_isis = [1]*len(opto_conditions)
-    # 
 
     outputDirectory = output_dir
     fileDate = str(datetime.datetime.now()).replace(':', '').replace(
         '.', '').replace('-', '').replace(' ', '')[2:14]
-    fileName = outputDirectory + fileDate + '_'+mouse_id + '.opto.pkl'
+    fileName = os.path.join(outputDirectory, fileDate + '_'+mouse_id + '.opto.pkl')
 
     print('saving info to: ' + fileName)
     fl = open(fileName, 'wb')
@@ -485,7 +484,7 @@ if __name__ == "__main__":
     # Create display window
     window = Window(fullscr=True,
                     monitor=monitor_name,
-                    screen=1, warp=None)
+                    screen=0, warp=None)
 
     # load our stimuli
     ICwcfg1 = create_ICwcfg1_1rep(Nrep, shared_repository_location) 
@@ -515,20 +514,23 @@ if __name__ == "__main__":
                 stimuli= [ICwcfg1, ICwcfg0, ICkcfg1, ICkcfg0, RFCI, sizeCI],
                 pre_blank_sec=0, #60,
                 post_blank_sec=30, #60,
-                params={},
+                params= {'sync_sqr_loc' : (868, 528)}
                 )
     
     # add in foraging so we can track wheel, potentially give rewards, etc
     f = Foraging(window       = window,
                                 auto_update = False,
-                                params      = {}
+                                params= {'sync_sqr_loc' : (868, 528)}
                                 )
     
     ss.add_item(f, "foraging")
 
     # run it
-    ss.run()
-    
+    try: 
+        ss.run()
+    except SystemExit:
+        print("We prevent camstim exiting the script to complete optotagging")
+        
     opto_disabled = json_params.get('disable_opto', True)
     
     if not(opto_disabled):

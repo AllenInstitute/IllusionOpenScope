@@ -327,7 +327,7 @@ if __name__ == "__main__":
     # Create display window
     window = Window(fullscr=True,
                     monitor=monitor_name,
-                    screen=1, warp=None)
+                    screen=0, warp=None)
     
     # load our stimuli
     ICwcfg1 = create_ICwcfg1_habit(DURFAC, shared_repository_location) 

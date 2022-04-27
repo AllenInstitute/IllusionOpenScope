@@ -455,7 +455,7 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28,
     outputDirectory = output_dir
     fileDate = str(datetime.datetime.now()).replace(':', '').replace(
         '.', '').replace('-', '').replace(' ', '')[2:14]
-    fileName = outputDirectory + fileDate + '_'+mouse_id + '.opto.pkl'
+    fileName = os.path.join(outputDirectory, fileDate + '_'+mouse_id + '.opto.pkl')
 
     print('saving info to: ' + fileName)
     fl = open(fileName, 'wb')
@@ -498,7 +498,7 @@ if __name__ == "__main__":
 
     # Create display window
     window = Window(fullscr=True, # Will return an error due to default size. Ignore.
-                screen=1,
+                screen=0,
                 monitor= monitor_name,
                 warp=None
                 )
@@ -544,7 +544,11 @@ if __name__ == "__main__":
     ss.add_item(f, "foraging")
     
     # run it
-    ss.run()
+    try: 
+        ss.run()
+    except SystemExit:
+        print("We prevent camstim exiting the script to complete optotagging")
+        
 
     opto_disabled = json_params.get('disable_opto', True)
     
