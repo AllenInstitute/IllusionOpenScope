@@ -89,7 +89,7 @@ def create_ICwcfg0(shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
-    trialorder = np.tile(range(len(image_path_list)), 25)
+    trialorder = np.tile(range(len(image_path_list)), 30)
     np.random.shuffle(trialorder)
 
     # replace the auto-generated sweep order with a custom one
@@ -127,7 +127,7 @@ def create_ICkcfg1(shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
-    trialorder = np.tile(range(len(image_path_list)), 25)
+    trialorder = np.tile(range(len(image_path_list)), 30)
     np.random.shuffle(trialorder)
 
     # replace the auto-generated sweep order with a custom one
@@ -165,7 +165,7 @@ def create_ICkcfg0(shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
-    trialorder = np.tile(range(len(image_path_list)), 25)
+    trialorder = np.tile(range(len(image_path_list)), 30)
     np.random.shuffle(trialorder)
 
     # replace the auto-generated sweep order with a custom one
@@ -511,14 +511,14 @@ if __name__ == "__main__":
     sizeCI = create_sizeCI(shared_repository_location)
 
     # each tuple determines in seconds start and end of each block.
-    ICwcfg1_ds = [(0, 4800)]
+    ICwcfg1_ds = [(0, 4600)]
     part1s = ICwcfg1_ds[-1][-1] # end of part 1
-    ICwcfg0_ds = [(part1s, part1s+480)]
-    ICkcfg1_ds = [(part1s+480, part1s+960)]
-    ICkcfg0_ds = [(part1s+960, part1s+1440)]
-    part2s = ICkcfg0_ds[-1][-1] # end of part 2. 4800+1440=6240
+    ICwcfg0_ds = [(part1s, part1s+560)]
+    ICkcfg1_ds = [(part1s+560, part1s+1120)]
+    ICkcfg0_ds = [(part1s+1120, part1s+1680)]
+    part2s = ICkcfg0_ds[-1][-1] # end of part 2. 4600+1680=6280
     RFCI_ds = [(part2s, part2s+210)]
-    sizeCI_ds = [(part2s+210, part2s+980)] # 6240+980=7220
+    sizeCI_ds = [(part2s+210, part2s+980)] # 6280+980=7260
 
     ICwcfg1.set_display_sequence(ICwcfg1_ds)
     ICwcfg0.set_display_sequence(ICwcfg0_ds)
