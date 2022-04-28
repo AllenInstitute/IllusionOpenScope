@@ -69,7 +69,7 @@ def create_ICwcfg1(shared_repository_location):
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
 
-    print('ICcfg1 stim')
+    print('ICwcfg1 stim')
     print(stimulus.sweep_order)
 
     return stimulus
@@ -107,7 +107,7 @@ def create_ICwcfg0(shared_repository_location):
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
 
-    print('ICcfg0 stim')
+    print('ICwcfg0 stim')
     print(stimulus.sweep_order)
     
     return stimulus
@@ -145,7 +145,7 @@ def create_ICkcfg1(shared_repository_location):
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
 
-    print('ICcfg0 stim')
+    print('ICkcfg1 stim')
     print(stimulus.sweep_order)
 
     return stimulus
@@ -183,7 +183,7 @@ def create_ICkcfg0(shared_repository_location):
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
 
-    print('ICcfg0 stim')
+    print('ICkcfg0 stim')
     print(stimulus.sweep_order)
 
     return stimulus
@@ -255,7 +255,7 @@ def create_sizeCI(shared_repository_location):
     # note, tif image mask gets rescaled to "size" parameter in Stimulus(visual.GratingStim())
     # i.e., must have the same aspect ratio
     # be careful with tif file size (e.g., 4096X4096 pixel tifs can lead to a lag ~+50%)
-    tifdir =  os.path.join(shared_repository_location, 'vissizemask' )
+    tifdir =  os.path.join(shared_repository_location, 'vissizemask//' )
     masklist = glob.glob(tifdir + '*.tif')
 
     rfpos = [(0,0)]
@@ -284,7 +284,7 @@ def create_sizeCI(shared_repository_location):
                     start_time=0.0,
                     blank_length=0.5,
                     blank_sweeps=0, # when 2, 1 out of 3 stimuli are blank (if shuffle=False, stim stim blank)
-                    runs=8, # when sweep_order is custom designated, runs is ignored
+                    runs=10, # when sweep_order is custom designated, runs is ignored
                     shuffle=False,
                     save_sweep_table=True,
                     )
