@@ -530,8 +530,8 @@ if __name__ == "__main__":
     # create SweepStim instance
     ss = SweepStim(window,
                 stimuli= [ICwcfg1, ICwcfg0, ICkcfg1, ICkcfg0, RFCI, sizeCI],
-                pre_blank_sec=0,
-                post_blank_sec=30,
+                pre_blank_sec=30,
+                post_blank_sec=15,
                 params= {'sync_sqr_loc' : (868, 528)}
                 )
 
