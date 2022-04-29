@@ -25,6 +25,10 @@ def create_ICwcfg1_1rep(Nrep, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), Nrep)
     np.random.shuffle(trialorder)
 
@@ -63,6 +67,10 @@ def create_ICwcfg0_1rep(Nrep, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), Nrep)
     np.random.shuffle(trialorder)
 
@@ -101,6 +109,10 @@ def create_ICkcfg1_1rep(Nrep, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), Nrep)
     np.random.shuffle(trialorder)
 
@@ -139,6 +151,10 @@ def create_ICkcfg0_1rep(Nrep, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), Nrep)
     np.random.shuffle(trialorder)
 

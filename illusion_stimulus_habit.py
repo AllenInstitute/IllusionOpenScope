@@ -25,6 +25,10 @@ def create_ICwcfg1_habit(DURFAC, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     highrepstim = ["110000", "110101", "110105", "110106", "110107", "110109", "110110", 
                 "110111", "111105", "111109", "111201", "111299"]
     highrepstiminds = np.zeros(len(highrepstim))
@@ -82,6 +86,10 @@ def create_ICwcfg0_habit(DURFAC, shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), 4*DURFAC)
     np.random.shuffle(trialorder)
 
@@ -120,6 +128,10 @@ def create_ICkcfg1_habit(DURFAC, shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), 4*DURFAC)
     np.random.shuffle(trialorder)
 
@@ -158,6 +170,10 @@ def create_ICkcfg0_habit(DURFAC, shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), 4*DURFAC)
     np.random.shuffle(trialorder)
 
