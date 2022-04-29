@@ -1,5 +1,5 @@
 """
-Author:         Hyeyoung Shin (Berkeley University), Jerome Lecoq (Allen Institute)
+Author:         Hyeyoung Shin (UC Berkeley), Jerome Lecoq (Allen Institute)
 """
 import camstim
 from camstim import Stimulus, SweepStim, Foraging, Window, NaturalScenes
