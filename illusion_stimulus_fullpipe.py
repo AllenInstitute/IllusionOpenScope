@@ -1,5 +1,5 @@
 """
-Author:         Hyeyoung Shin (Berkeley University), Jerome Lecoq (Allen Institute)
+Author:         Hyeyoung Shin (UC Berkeley), Jerome Lecoq (Allen Institute)
 """
 import camstim
 from camstim import Stimulus, SweepStim, Foraging, Window, NaturalScenes
@@ -32,6 +32,10 @@ def create_ICwcfg1(shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     highrepstim = ["110000", "110101", "110105", "110106", "110107", "110109", "110110", 
                 "110111", "111105", "111109", "111201", "111299"]
     highrepstiminds = np.zeros(len(highrepstim))
@@ -69,7 +73,7 @@ def create_ICwcfg1(shared_repository_location):
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
 
-    print('ICcfg1 stim')
+    print('ICwcfg1 stim')
     print(stimulus.sweep_order)
 
     return stimulus
@@ -89,7 +93,11 @@ def create_ICwcfg0(shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
-    trialorder = np.tile(range(len(image_path_list)), 25)
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
+    trialorder = np.tile(range(len(image_path_list)), 30)
     np.random.shuffle(trialorder)
 
     # replace the auto-generated sweep order with a custom one
@@ -107,7 +115,7 @@ def create_ICwcfg0(shared_repository_location):
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
 
-    print('ICcfg0 stim')
+    print('ICwcfg0 stim')
     print(stimulus.sweep_order)
     
     return stimulus
@@ -127,7 +135,11 @@ def create_ICkcfg1(shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
-    trialorder = np.tile(range(len(image_path_list)), 25)
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
+    trialorder = np.tile(range(len(image_path_list)), 30)
     np.random.shuffle(trialorder)
 
     # replace the auto-generated sweep order with a custom one
@@ -145,7 +157,7 @@ def create_ICkcfg1(shared_repository_location):
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
 
-    print('ICcfg0 stim')
+    print('ICkcfg1 stim')
     print(stimulus.sweep_order)
 
     return stimulus
@@ -165,7 +177,11 @@ def create_ICkcfg0(shared_repository_location):
                             shuffle=False,)
 
     image_path_list = stimulus.image_path_list
-    trialorder = np.tile(range(len(image_path_list)), 25)
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
+    trialorder = np.tile(range(len(image_path_list)), 30)
     np.random.shuffle(trialorder)
 
     # replace the auto-generated sweep order with a custom one
@@ -183,7 +199,7 @@ def create_ICkcfg0(shared_repository_location):
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
 
-    print('ICcfg0 stim')
+    print('ICkcfg0 stim')
     print(stimulus.sweep_order)
 
     return stimulus
@@ -255,7 +271,7 @@ def create_sizeCI(shared_repository_location):
     # note, tif image mask gets rescaled to "size" parameter in Stimulus(visual.GratingStim())
     # i.e., must have the same aspect ratio
     # be careful with tif file size (e.g., 4096X4096 pixel tifs can lead to a lag ~+50%)
-    tifdir =  os.path.join(shared_repository_location, 'vissizemask' )
+    tifdir =  os.path.join(shared_repository_location, 'vissizemask//' )
     masklist = glob.glob(tifdir + '*.tif')
 
     rfpos = [(0,0)]
@@ -284,7 +300,7 @@ def create_sizeCI(shared_repository_location):
                     start_time=0.0,
                     blank_length=0.5,
                     blank_sweeps=0, # when 2, 1 out of 3 stimuli are blank (if shuffle=False, stim stim blank)
-                    runs=8, # when sweep_order is custom designated, runs is ignored
+                    runs=10, # when sweep_order is custom designated, runs is ignored
                     shuffle=False,
                     save_sweep_table=True,
                     )
@@ -511,14 +527,14 @@ if __name__ == "__main__":
     sizeCI = create_sizeCI(shared_repository_location)
 
     # each tuple determines in seconds start and end of each block.
-    ICwcfg1_ds = [(0, 4800)]
+    ICwcfg1_ds = [(0, 4600)]
     part1s = ICwcfg1_ds[-1][-1] # end of part 1
-    ICwcfg0_ds = [(part1s, part1s+480)]
-    ICkcfg1_ds = [(part1s+480, part1s+960)]
-    ICkcfg0_ds = [(part1s+960, part1s+1440)]
-    part2s = ICkcfg0_ds[-1][-1] # end of part 2. 4800+1440=6240
+    ICwcfg0_ds = [(part1s, part1s+560)]
+    ICkcfg1_ds = [(part1s+560, part1s+1120)]
+    ICkcfg0_ds = [(part1s+1120, part1s+1680)]
+    part2s = ICkcfg0_ds[-1][-1] # end of part 2. 4600+1680=6280
     RFCI_ds = [(part2s, part2s+210)]
-    sizeCI_ds = [(part2s+210, part2s+980)] # 6240+980=7220
+    sizeCI_ds = [(part2s+210, part2s+980)] # 6280+980=7260
 
     ICwcfg1.set_display_sequence(ICwcfg1_ds)
     ICwcfg0.set_display_sequence(ICwcfg0_ds)
@@ -530,8 +546,8 @@ if __name__ == "__main__":
     # create SweepStim instance
     ss = SweepStim(window,
                 stimuli= [ICwcfg1, ICwcfg0, ICkcfg1, ICkcfg0, RFCI, sizeCI],
-                pre_blank_sec=0,
-                post_blank_sec=30,
+                pre_blank_sec=30,
+                post_blank_sec=15,
                 params= {'sync_sqr_loc' : (868, 528)}
                 )
 
