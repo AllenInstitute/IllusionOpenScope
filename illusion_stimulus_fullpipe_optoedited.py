@@ -383,8 +383,9 @@ def generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRa
         
     return data
 
+# HS 220516: CHECK THAT LEVELS (LED POWERS) HERE ARE THE SAME SCALE AS THE ALLEN BRAIN OBSERVATORY
 #def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28, 1.345], output_dir = 'C:/ProgramData/camstim/output/'):
-def optotagging(mouse_id, operation_mode='experiment', level_list = [1.345], output_dir = 'C:/ProgramData/camstim/output/'):
+def optotagging(mouse_id, operation_mode='experiment', level_list = [4], output_dir = 'C:/ProgramData/camstim/output/'):
 
     sampleRate = 10000
 
@@ -420,9 +421,10 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [1.345], out
     data_10s = np.zeros((sampleRate*10,), dtype=np.float64)
     data_10s[:-2] = 1
 
-    ##### THESE STIMULI ADDED FOR OPENSCOPE ILLUSION PROJECT #####
+    ##### HS 220516: THESE STIMULI ADDED FOR OPENSCOPE ILLUSION PROJECT #####
     #generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRate = 10000.)
     data_1Hz = generatePulseTrain(2, 1000, 1, 0.1) # just a single pulse of 2 ms
+    data_1Hz_10ms = generatePulseTrain(10, 1000, 1, 0.1) # just a single pulse of 10 ms
     data_5Hz = generatePulseTrain(2, 200, 5, 0.1) # 1 second of 5Hz pulse train. Each pulse is 2 ms wide
     data_10Hz = generatePulseTrain(2, 100, 10, 0.1)
     data_20Hz = generatePulseTrain(2, 50, 20, 0.1)
@@ -431,7 +433,7 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [1.345], out
     data_50Hz = generatePulseTrain(2, 20, 50, 0.1)
     data_60Hz = generatePulseTrain(2, 16.7, 60, 0.1)
     data_80Hz = generatePulseTrain(2, 12.5, 80, 0.1)
-    data_100Hz = generatePulseTrain(2, 10, 100, 0.1) # 1 second of 100 Hz pulse train. Each pulse is 2 ms wide
+    #data_100Hz = generatePulseTrain(2, 10, 100, 0.1) # 1 second of 100 Hz pulse train. Each pulse is 2 ms wide
     data_square1s = generatePulseTrain(1000, 1000, 1, 0.1) # 1 second square pulse: continuously on for 1s
     #########################################################
     
@@ -444,7 +446,7 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [1.345], out
     # condition_list = [2, 3]
     # waveforms = [data_2ms_10Hz, data_5ms, data_10ms, data_cosine]
     condition_list = [0,1,2,3,4,5,6,7,8,9,10,11]
-    waveforms = [data_1Hz, data_5Hz, data_10Hz, data_20Hz, data_30Hz, data_40Hz, data_50Hz, data_60Hz, data_80Hz, data_100Hz, data_square1s, data_cosine]
+    waveforms = [data_1Hz_10ms, data_1Hz, data_5Hz, data_10Hz, data_20Hz, data_30Hz, data_40Hz, data_50Hz, data_60Hz, data_80Hz, data_square1s, data_cosine]
     
     opto_levels = np.array(level_list*numRepeats*len(condition_list)) #     BLUE
     opto_conditions = condition_list*numRepeats*len(level_list)
@@ -601,6 +603,7 @@ if __name__ == "__main__":
             'Optogenetics',
             path=config_path,
         )
+        # HS 220516: MIGHT NEED TO EDIT stim.cfg file TO INCLUDE ONLY THE HIGHET POWER LEVEL?
         opto_params["level_list"] = stim_cfg_opto_params["level_list"]
 
         optotagging(**opto_params)
