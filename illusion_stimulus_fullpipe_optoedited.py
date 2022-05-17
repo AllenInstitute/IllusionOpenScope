@@ -365,7 +365,8 @@ def generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRa
    # rise_samples =     
     
     rise_and_fall = (((1 - np.cos(np.arange(sampleRate*riseTime/1000., dtype=np.float64)*2*np.pi/10))+1)-1)/2
-    half_length = rise_and_fall.size / 2
+    # half_length = rise_and_fall.size / 2
+    half_length = int(rise_and_fall.size / 2)
     rise = rise_and_fall[:half_length]
     fall = rise_and_fall[half_length:]
     
@@ -385,7 +386,7 @@ def generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRa
 
 # HS 220516: CHECK THAT LEVELS (LED POWERS) HERE ARE THE SAME SCALE AS THE ALLEN BRAIN OBSERVATORY
 #def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28, 1.345], output_dir = 'C:/ProgramData/camstim/output/'):
-def optotagging(mouse_id, operation_mode='experiment', level_list = [4], output_dir = 'C:/ProgramData/camstim/output/'):
+def optotagging(mouse_id, operation_mode='experiment', level_list = [1.4], output_dir = 'C:/ProgramData/camstim/output/'):
 
     sampleRate = 10000
 
@@ -423,24 +424,26 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [4], output_
 
     ##### HS 220516: THESE STIMULI ADDED FOR OPENSCOPE ILLUSION PROJECT #####
     #generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRate = 10000.)
-    data_1Hz = generatePulseTrain(2, 1000, 1, 0.1) # just a single pulse of 2 ms
-    data_1Hz_10ms = generatePulseTrain(10, 1000, 1, 0.1) # just a single pulse of 10 ms
-    data_5Hz = generatePulseTrain(2, 200, 5, 0.1) # 1 second of 5Hz pulse train. Each pulse is 2 ms wide
-    data_10Hz = generatePulseTrain(2, 100, 10, 0.1)
-    data_20Hz = generatePulseTrain(2, 50, 20, 0.1)
-    data_30Hz = generatePulseTrain(2, 33.3, 30, 0.1)
-    data_40Hz = generatePulseTrain(2, 25, 40, 0.1)  # 1 second of 40 Hz pulse train. Each pulse is 2 ms wide
-    data_50Hz = generatePulseTrain(2, 20, 50, 0.1)
-    data_60Hz = generatePulseTrain(2, 16.7, 60, 0.1)
-    data_80Hz = generatePulseTrain(2, 12.5, 80, 0.1)
-    #data_100Hz = generatePulseTrain(2, 10, 100, 0.1) # 1 second of 100 Hz pulse train. Each pulse is 2 ms wide
-    data_square1s = generatePulseTrain(1000, 1000, 1, 0.1) # 1 second square pulse: continuously on for 1s
+    Trise = .2 # in ms
+    Tpulse = 2.4
+    data_1Hz = generatePulseTrain(Tpulse, 1000, 1, Trise) # just a single pulse of 2 ms
+    data_1Hz_10ms = generatePulseTrain(10, 1000, 1, Trise) # just a single pulse of 10 ms
+    data_5Hz = generatePulseTrain(Tpulse, 200, 5, Trise) # 1 second of 5Hz pulse train. Each pulse is 2 ms wide
+    data_10Hz = generatePulseTrain(Tpulse, 100, 10, Trise)
+    data_20Hz = generatePulseTrain(Tpulse, 50, 20, Trise)
+    data_30Hz = generatePulseTrain(Tpulse, 33.3, 30, Trise)
+    data_40Hz = generatePulseTrain(Tpulse, 25, 40, Trise)  # 1 second of 40 Hz pulse train. Each pulse is 2 ms wide
+    data_50Hz = generatePulseTrain(Tpulse, 20, 50, Trise)
+    data_60Hz = generatePulseTrain(Tpulse, 16.7, 60, Trise)
+    data_80Hz = generatePulseTrain(Tpulse, 12.5, 80, Trise)
+    #data_100Hz = generatePulseTrain(Tpulse, 10, 100, Trise) # 1 second of 100 Hz pulse train. Each pulse is 2 ms wide
+    data_square1s = generatePulseTrain(1000, 1000, 1, Trise) # 1 second square pulse: continuously on for 1s
     #########################################################
     
     # for experiment
 
-    isi = 1.5
-    isi_rand = 0.5
+    isi = 2.0
+    isi_rand = 1.0
     numRepeats = 50
 
     # condition_list = [2, 3]
