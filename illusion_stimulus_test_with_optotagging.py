@@ -32,6 +32,10 @@ def create_ICwcfg1_1rep(Nrep, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), Nrep)
     np.random.shuffle(trialorder)
 
@@ -49,8 +53,9 @@ def create_ICwcfg1_1rep(Nrep, shared_repository_location):
     sweep_order[sweep_order==-1]=0
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\ICwcfg1.stim"
 
-    print('ICcfg1 stim')
+    print('ICwcfg1 stim')
     print(stimulus.sweep_order)
 
     return stimulus
@@ -70,6 +75,10 @@ def create_ICwcfg0_1rep(Nrep, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), Nrep)
     np.random.shuffle(trialorder)
 
@@ -87,8 +96,9 @@ def create_ICwcfg0_1rep(Nrep, shared_repository_location):
     sweep_order[sweep_order==-1]=0
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\ICwcfg0.stim"
 
-    print('ICcfg0 stim')
+    print('ICwcfg0 stim')
     print(stimulus.sweep_order)
     
     return stimulus
@@ -108,6 +118,10 @@ def create_ICkcfg1_1rep(Nrep, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), Nrep)
     np.random.shuffle(trialorder)
 
@@ -125,8 +139,9 @@ def create_ICkcfg1_1rep(Nrep, shared_repository_location):
     sweep_order[sweep_order==-1]=0
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\ICkcfg1.stim"
 
-    print('ICcfg1 stim')
+    print('ICkcfg1 stim')
     print(stimulus.sweep_order)
         
     return stimulus
@@ -146,6 +161,10 @@ def create_ICkcfg0_1rep(Nrep, shared_repository_location):
                             shuffle=True,)
 
     image_path_list = stimulus.image_path_list
+    fnsplit = image_path_list[0].split('.')
+    if fnsplit[0][-4:] != '0000':
+        raise Exception('first file on image path should be just the four circles')
+
     trialorder = np.tile(range(len(image_path_list)), Nrep)
     np.random.shuffle(trialorder)
 
@@ -163,8 +182,9 @@ def create_ICkcfg0_1rep(Nrep, shared_repository_location):
     sweep_order[sweep_order==-1]=0
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\ICkcfg0.stim"
 
-    print('ICcfg0 stim')
+    print('ICkcfg0 stim')
     print(stimulus.sweep_order)
 
     return stimulus
@@ -224,6 +244,7 @@ def create_RFCI_1rep(Nrep, shared_repository_location):
 
     # rebuild the frame list (I may make this automatic in the future)
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\RFCI.stim"
 
     print('RFCI stim')
     print(stimulus.sweep_order)
@@ -236,7 +257,7 @@ def create_sizeCI_1rep(Nrep, shared_repository_location):
     # note, tif image mask gets rescaled to "size" parameter in Stimulus(visual.GratingStim())
     # i.e., must have the same aspect ratio
     # be careful with tif file size (e.g., 4096X4096 pixel tifs can lead to a lag ~+50%)
-    tifdir =  os.path.join(shared_repository_location, 'vissizemask' )
+    tifdir =  os.path.join(shared_repository_location, 'vissizemask//' )
     masklist = glob.glob(tifdir + '*.tif')
 
     rfpos = [(0,0)]
@@ -282,6 +303,7 @@ def create_sizeCI_1rep(Nrep, shared_repository_location):
 
     # rebuild the frame list (I may make this automatic in the future)
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\sizeCI.stim"
 
     print('sizeCI stim')
     print(stimulus.sweep_order)
@@ -330,7 +352,8 @@ def generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRa
    # rise_samples =     
     
     rise_and_fall = (((1 - np.cos(np.arange(sampleRate*riseTime/1000., dtype=np.float64)*2*np.pi/10))+1)-1)/2
-    half_length = rise_and_fall.size / 2
+    # half_length = rise_and_fall.size / 2
+    half_length = int(rise_and_fall.size / 2)
     rise = rise_and_fall[:half_length]
     fall = rise_and_fall[half_length:]
     
@@ -348,7 +371,9 @@ def generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRa
         
     return data
 
-def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28, 1.345], output_dir = 'C:/ProgramData/camstim/output/'):
+# HS 220516: CHECK THAT LEVELS (LED POWERS) HERE ARE THE SAME SCALE AS THE ALLEN BRAIN OBSERVATORY
+#def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28, 1.345], output_dir = 'C:/ProgramData/camstim/output/'):
+def optotagging(mouse_id, operation_mode='experiment', level_list = [1.4], output_dir = 'C:/ProgramData/camstim/output/'):
 
     sampleRate = 10000
 
@@ -384,14 +409,34 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28,
     data_10s = np.zeros((sampleRate*10,), dtype=np.float64)
     data_10s[:-2] = 1
 
+    ##### HS 220516: THESE STIMULI ADDED FOR OPENSCOPE ILLUSION PROJECT #####
+    #generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRate = 10000.)
+    Trise = .2 # in ms
+    Tpulse = 2.4
+    data_1Hz = generatePulseTrain(Tpulse, 1000, 1, Trise) # just a single pulse of 2 ms
+    data_1Hz_10ms = generatePulseTrain(10, 1000, 1, Trise) # just a single pulse of 10 ms
+    data_5Hz = generatePulseTrain(Tpulse, 200, 5, Trise) # 1 second of 5Hz pulse train. Each pulse is 2 ms wide
+    data_10Hz = generatePulseTrain(Tpulse, 100, 10, Trise)
+    data_20Hz = generatePulseTrain(Tpulse, 50, 20, Trise)
+    data_30Hz = generatePulseTrain(Tpulse, 33.3, 30, Trise)
+    data_40Hz = generatePulseTrain(Tpulse, 25, 40, Trise)  # 1 second of 40 Hz pulse train. Each pulse is 2 ms wide
+    data_50Hz = generatePulseTrain(Tpulse, 20, 50, Trise)
+    data_60Hz = generatePulseTrain(Tpulse, 16.7, 60, Trise)
+    data_80Hz = generatePulseTrain(Tpulse, 12.5, 80, Trise)
+    #data_100Hz = generatePulseTrain(Tpulse, 10, 100, Trise) # 1 second of 100 Hz pulse train. Each pulse is 2 ms wide
+    data_square1s = generatePulseTrain(1000, 1000, 1, Trise) # 1 second square pulse: continuously on for 1s
+    #########################################################
+    
     # for experiment
 
-    isi = 1.5
-    isi_rand = 0.5
+    isi = 2.0
+    isi_rand = 1.0
     numRepeats = 50
 
-    condition_list = [2, 3]
-    waveforms = [data_2ms_10Hz, data_5ms, data_10ms, data_cosine]
+    # condition_list = [2, 3]
+    # waveforms = [data_2ms_10Hz, data_5ms, data_10ms, data_cosine]
+    condition_list = [0,1,2,3,4,5,6,7,8,9,10,11]
+    waveforms = [data_1Hz_10ms, data_1Hz, data_5Hz, data_10Hz, data_20Hz, data_30Hz, data_40Hz, data_50Hz, data_60Hz, data_80Hz, data_square1s, data_cosine]
     
     opto_levels = np.array(level_list*numRepeats*len(condition_list)) #     BLUE
     opto_conditions = condition_list*numRepeats*len(level_list)
@@ -412,8 +457,10 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28,
 
         numRepeats = 2
 
-        condition_list = [0]
-        waveforms = [data_10s, data_10s]
+        # condition_list = [0]
+        # waveforms = [data_10s, data_10s]
+        condition_list = [0, 1]
+        waveforms = [data_1Hz, data_square1s]
         
         opto_levels = np.array(level_list*numRepeats*len(condition_list)) #     BLUE
         opto_conditions = condition_list*numRepeats*len(level_list)
@@ -423,14 +470,17 @@ def optotagging(mouse_id, operation_mode='experiment', level_list = [1.15, 1.28,
     elif operation_mode=='pretest':
         numRepeats = 1
         
-        condition_list = [0]
-        data_2s = data_10s[-sampleRate*2:]
-        waveforms = [data_2s]
+        # condition_list = [0]
+        # data_2s = data_10s[-sampleRate*2:]
+        # waveforms = [data_2s]
+        condition_list = [0, 1]
+        waveforms = [data_1Hz, data_square1s]
         
         opto_levels = np.array(level_list*numRepeats*len(condition_list)) #     BLUE
         opto_conditions = condition_list*numRepeats*len(level_list)
         opto_conditions = np.sort(opto_conditions)
         opto_isis = [1]*len(opto_conditions)
+    # 
 
     outputDirectory = output_dir
     fileDate = str(datetime.datetime.now()).replace(':', '').replace(
