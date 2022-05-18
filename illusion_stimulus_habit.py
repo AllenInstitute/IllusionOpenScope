@@ -65,6 +65,7 @@ def create_ICwcfg1_habit(DURFAC, shared_repository_location):
     sweep_order[sweep_order==-1]=0
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\ICwcfg1.stim"
 
     print('ICwcfg1 stim')
     print(stimulus.sweep_order)
@@ -107,6 +108,7 @@ def create_ICwcfg0_habit(DURFAC, shared_repository_location):
     sweep_order[sweep_order==-1]=0
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\ICwcfg0.stim"
 
     print('ICwcfg0 stim')
     print(stimulus.sweep_order) 
@@ -149,6 +151,7 @@ def create_ICkcfg1_habit(DURFAC, shared_repository_location):
     sweep_order[sweep_order==-1]=0
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\ICkcfg1.stim"
 
     print('ICkcfg1 stim')
     print(stimulus.sweep_order)
@@ -191,6 +194,7 @@ def create_ICkcfg0_habit(DURFAC, shared_repository_location):
     sweep_order[sweep_order==-1]=0
     stimulus.sweep_order = sweep_order.reshape(-1).tolist()
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\ICkcfg0.stim"
 
     print('ICkcfg0 stim')
     print(stimulus.sweep_order)
@@ -252,6 +256,7 @@ def create_RFCI_habit(DURFAC, shared_repository_location):
 
     # rebuild the frame list (I may make this automatic in the future)
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\RFCI.stim"
 
     print('RFCI stim')
     print(stimulus.sweep_order)
@@ -310,6 +315,7 @@ def create_sizeCI_habit(DURFAC, shared_repository_location):
 
     # rebuild the frame list (I may make this automatic in the future)
     stimulus._build_frame_list()
+    stimulus.stim_path = r"C:\\not_a_stim_script\\sizeCI.stim"
 
     print('sizeCI stim')
     print(stimulus.sweep_order)
