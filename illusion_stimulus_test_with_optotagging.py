@@ -349,7 +349,6 @@ def run_optotagging(levels, conditions, waveforms, isis, sampleRate = 10000.):
 def generatePulseTrain(pulseWidth, pulseInterval, numRepeats, riseTime, sampleRate = 10000.):
     
     data = np.zeros((int(sampleRate),), dtype=np.float64)    
-   # rise_samples =     
     
     rise_and_fall = (((1 - np.cos(np.arange(sampleRate*riseTime/1000., dtype=np.float64)*2*np.pi/10))+1)-1)/2
     # half_length = rise_and_fall.size / 2
